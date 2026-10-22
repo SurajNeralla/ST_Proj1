@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PhishGuard AI</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Top Bar: Logo & Master Switch -->
+    <header class="popup-header">
+      <div class="brand">
+        <svg class="brand-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="#0f1f38" stroke="#00f2fe" stroke-width="2"/>
+          <path d="m9 12 2 2 4-4" stroke="#00f2fe" stroke-width="2.2" stroke-linecap="round"/>
+        </svg>
+        <div>
+          <h1 class="brand-title">PhishGuard <span class="ai-pill">AI</span></h1>
+          <p class="brand-sub">Real-Time Threat Model</p>
+        </div>
+      </div>
+
+      <!-- Master Protection Toggle -->
+      <label class="switch" title="Toggle Real-Time Protection">
+        <input type="checkbox" id="toggleMasterProtection" checked>
+        <span class="slider round"></span>
+      </label>
+    </header>
+
+    <!-- Protection Status Bar -->
+    <div id="statusBanner" class="status-banner status-active">
+      <span class="status-dot"></span>
+      <span id="statusText">Protection Active</span>
+    </div>
+
+    <!-- Protection Mode Selector -->
+    <section class="mode-section">
+      <div class="section-label">Protection Mode</div>
+      <div class="mode-selector">
+        <label class="mode-pill" id="labelSafeMode">
+          <input type="radio" name="protectionMode" id="radioSafeMode" value="safe" checked>
+          <span class="pill-content">
+            <strong>Safe Mode</strong>
+            <small>Warning Page (Default)</small>
+          </span>
+        </label>
+        <label class="mode-pill" id="labelAutoClose">
+          <input type="radio" name="protectionMode" id="radioAutoClose" value="auto_close">
+          <span class="pill-content">
+            <strong>Auto-Close</strong>
+            <small>Close Tab on Phishing</small>
+          </span>
+        </label>
+      </div>
+    </section>
+
+    <!-- Active Tab Inspection Card -->
+    <section class="current-site-card">
+      <div class="card-header">
+        <span class="section-label">Active Website</span>
+        <button id="btnRescan" class="icon-btn" title="Scan Website Again">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="23 4 23 10 17 10"/>
+            <polyline points="1 20 1 14 7 14"/>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="site-hostname" id="activeHostname">Detecting...</div>
+
+      <!-- Risk Level & Score Badge -->
+      <div class="assessment-row">
+        <span id="activeRiskBadge" class="badge badge-low">Checking...</span>
+        <span class="risk-score-display" id="activeScoreDisplay">Score: --</span>
+      </div>
+
+      <!-- Score Bar -->
+      <div class="score-bar-bg">
+        <div id="scoreBarFill" class="score-bar-fill" style="width: 0%;"></div>
+      </div>
+
+      <!-- Indicators Summary -->
+      <div id="activeIndicatorsContainer" class="indicators-container">
+        <!-- Rendered by popup.js -->
+      </div>
+    </section>
+
+    <!-- Quick Stats Metric Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" id="statBlocked">0</div>
+        <div class="stat-label">Threats Blocked</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="statScanned">0</div>
+        <div class="stat-label">Sites Evaluated</div>
+      </div>
+    </div>
+
+    <!-- Demonstration Test Fixtures Accordion (College Evaluation Mode) -->
+    <div class="demo-section">
+      <button id="btnToggleDemo" class="demo-toggle-btn">
+        <span>Evaluation Test Fixtures</span>
+        <svg class="chevron" id="demoChevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </button>
+
+      <div id="demoPanel" class="demo-panel hidden">
+        <p class="demo-desc">Use safe, reserved test domains to demonstrate detection and tab-closing without visiting real malware:</p>
+        <div class="demo-buttons">
+          <button class="btn-demo" data-url="http://phishing-test.example">
+            <span class="tag tag-red">Confirmed</span> phishing-test.example
+          </button>
+          <button class="btn-demo" data-url="http://bank-verify-security.test">
+            <span class="tag tag-red">Confirmed</span> bank-verify-security.test
+          </button>
+          <button class="btn-demo" data-url="http://suspicious-deals.xyz">
+            <span class="tag tag-yellow">Suspicious</span> suspicious-deals.xyz
+          </button>
+          <button class="btn-demo" data-url="http://safe-demo.example">
+            <span class="tag tag-green">Safe</span> safe-demo.example
+          </button>
+          <button class="btn-demo" data-url="http://unavailable-service.example">
+            <span class="tag tag-gray">Outage</span> unavailable-service.example
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- History View Button & Drawer -->
+    <div class="history-actions">
+      <button id="btnToggleHistory" class="btn-outline">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+        Recent Scan History
+      </button>
+    </div>
+
+    <!-- History Panel -->
+    <div id="historyPanel" class="history-panel hidden">
+      <div class="history-header">
+        <h3>Recent Scans</h3>
+        <button id="btnClearHistory" class="btn-text-danger">Clear</button>
+      </div>
+      <div id="historyList" class="history-list">
+        <p class="empty-text">No scans recorded yet.</p>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="popup-footer">
+      <div style="color: #38bdf8; font-size: 0.68rem; margin-bottom: 2px;">
+        🛡️ Feed: 8,000+ Records (Phishing-Database)
+      </div>
+      <span>PhishGuard AI v1.0.0 &bull; Local Threat Engine</span>
+    </footer>
+  </div>
+
+  <script src="phishing_db.js"></script>
+  <script src="storage.js"></script>
+  <script src="detector.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

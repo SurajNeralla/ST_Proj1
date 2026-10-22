@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PhishGuard AI — Phishing Threat Model & Analyzer</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Navbar / Brand Header -->
+    <header class="navbar">
+      <div class="nav-brand">
+        <svg class="brand-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="#0f192e" stroke="#00f2fe" stroke-width="2"/>
+          <path d="m9 12 2 2 4-4" stroke="#00f2fe" stroke-width="2.2" stroke-linecap="round"/>
+        </svg>
+        <div>
+          <h1 class="brand-title">PhishGuard <span class="ai-badge">AI</span></h1>
+          <p class="brand-subtitle">Basic AI-Assisted Phishing Threat Model</p>
+        </div>
+      </div>
+      <div class="nav-status">
+        <span class="status-indicator"></span>
+        <span class="status-label">Local Rule Engine Active</span>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <!-- Section 1: Hero & Dashboard Metric Cards -->
+      <section class="dashboard-hero">
+        <div class="hero-text">
+          <h2>Phishing Threat Detection & Analysis Dashboard</h2>
+          <p>Inspect suspicious emails, SMS messages, and WhatsApp alerts for credential harvesting, urgent coercion, and spoofed links. Track assessments with persistent SQLite history.</p>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-icon metric-total">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+            <div class="metric-content">
+              <span class="metric-number" id="metricTotal">0</span>
+              <span class="metric-name">Messages Analyzed</span>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon metric-phish">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <div class="metric-content">
+              <span class="metric-number" id="metricPhishing">0</span>
+              <span class="metric-name">Likely Phishing</span>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon metric-suspicious">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <div class="metric-content">
+              <span class="metric-number" id="metricSuspicious">0</span>
+              <span class="metric-name">Suspicious Messages</span>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon metric-safe">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <div class="metric-content">
+              <span class="metric-number" id="metricLow">0</span>
+              <span class="metric-name">No Strong Indicators</span>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon metric-score">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            </div>
+            <div class="metric-content">
+              <span class="metric-number" id="metricAvgScore">0</span>
+              <span class="metric-name">Avg Risk Score</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Phishing Message Analyzer & Results -->
+      <section class="analyzer-grid">
+        <!-- Input Form Card -->
+        <div class="card analyzer-card">
+          <div class="card-header">
+            <h3>Phishing Message Analyzer</h3>
+            <span class="card-sub">Paste text from Email, SMS, or WhatsApp</span>
+          </div>
+
+          <!-- Quick Test Presets -->
+          <div class="presets-row">
+            <span class="presets-label">Quick Presets:</span>
+            <div class="presets-chips">
+              <button class="chip" data-preset="otp">🚨 OTP Scam</button>
+              <button class="chip" data-preset="suspension">⚠️ Account Lock</button>
+              <button class="chip" data-preset="lottery">🎁 Prize Lure</button>
+              <button class="chip" data-preset="link">🔗 Urgent IP Link</button>
+              <button class="chip" data-preset="normal">✅ Normal Meeting</button>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <textarea id="messageInput" placeholder="Paste the suspicious email, SMS, or WhatsApp message here..." rows="8"></textarea>
+            <div class="char-count"><span id="charCount">0</span> characters</div>
+          </div>
+
+          <div class="button-row">
+            <button id="btnAnalyze" class="btn btn-primary">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <span>Analyze Message</span>
+            </button>
+            <button id="btnClearInput" class="btn btn-secondary">Clear</button>
+          </div>
+        </div>
+
+        <!-- Analysis Results Card -->
+        <div class="card results-card" id="resultsCard">
+          <div class="card-header">
+            <h3>Assessment Result</h3>
+            <span id="resultTimestamp" class="card-sub">Awaiting input...</span>
+          </div>
+
+          <div id="resultsPlaceholder" class="placeholder-state">
+            <svg class="placeholder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+              <line x1="8" y1="21" x2="16" y2="21"/>
+              <line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
+            <p>Paste a message and click <strong>Analyze Message</strong> to inspect potential phishing indicators and view the risk assessment.</p>
+          </div>
+
+          <div id="resultsContent" class="results-content hidden">
+            <!-- Classification & Score Display -->
+            <div class="assessment-banner" id="assessmentBanner">
+              <div class="classification-info">
+                <span class="classification-label">Classification</span>
+                <h4 id="classificationTitle">Likely Phishing</h4>
+              </div>
+              <div class="score-dial">
+                <span class="score-num" id="scoreNum">85</span>
+                <span class="score-max">/100</span>
+              </div>
+            </div>
+
+            <!-- Risk Progress Gauge -->
+            <div class="gauge-container">
+              <div class="gauge-bar">
+                <div id="gaugeFill" class="gauge-fill" style="width: 85%;"></div>
+              </div>
+              <div class="gauge-labels">
+                <span>0 (No Strong Indicators)</span>
+                <span>30 (Suspicious)</span>
+                <span>65 (Likely Phishing)</span>
+                <span>100</span>
+              </div>
+            </div>
+
+            <!-- Explanation Box -->
+            <div class="explanation-box">
+              <h5>Analysis Summary</h5>
+              <p id="explanationText">High-confidence threat: The message exhibits multiple distinct phishing indicators.</p>
+            </div>
+
+            <!-- Detected Indicators List -->
+            <div class="indicators-section">
+              <h5>Detected Warning Signs (<span id="warningCount">0</span>)</h5>
+              <div id="warningList" class="warning-list">
+                <!-- Rendered dynamically -->
+              </div>
+            </div>
+
+            <!-- Recommended Safety Actions -->
+            <div class="mitigations-section">
+              <h5>Recommended Safety Actions</h5>
+              <ul id="mitigationsList" class="mitigations-list">
+                <!-- Rendered dynamically -->
+              </ul>
+            </div>
+
+            <!-- Mandatory Educational Disclaimer -->
+            <div class="disclaimer-alert">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+              </svg>
+              <div>
+                <strong>Notice:</strong> This assessment is an initial heuristic evaluation for educational threat modeling and is not a 100% guarantee. A message without flagged keywords should still be treated cautiously.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Phishing Threat Model Table -->
+      <section class="card threat-model-section">
+        <div class="card-header">
+          <div>
+            <h3>Phishing Threat Model</h3>
+            <span class="card-sub">Example threat scenarios, attack vectors, and recommended mitigations</span>
+          </div>
+          <span class="threat-model-tag">Threat Matrix Baseline</span>
+        </div>
+
+        <p class="section-intro">Below are example cybersecurity threat scenarios demonstrating common phishing modalities, their potential organizational impact, and practical mitigations:</p>
+
+        <div class="table-responsive">
+          <table class="threat-table">
+            <thead>
+              <tr>
+                <th>Threat Scenario</th>
+                <th>Description</th>
+                <th>Likelihood</th>
+                <th>Impact</th>
+                <th>Recommended Mitigations</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Fake Login Emails</strong></td>
+                <td>Deceptive emails spoofing legitimate corporate or personal portals to harvest usernames and passwords.</td>
+                <td><span class="badge badge-high">High</span></td>
+                <td><span class="badge badge-critical">Critical</span></td>
+                <td>Multi-Factor Authentication (MFA), password managers with origin matching, and email domain verification (DMARC/SPF).</td>
+              </tr>
+              <tr>
+                <td><strong>2. Suspicious Links</strong></td>
+                <td>Hyperlinks pointing to typosquatted domains, IP addresses, or URL shorteners to direct users to fraudulent sites.</td>
+                <td><span class="badge badge-high">High</span></td>
+                <td><span class="badge badge-high">High</span></td>
+                <td>Inspecting link URLs before clicking, web-filtering extensions, and browser sandbox isolation.</td>
+              </tr>
+              <tr>
+                <td><strong>3. Fake Payment Requests</strong></td>
+                <td>Social engineering messages claiming unpaid invoices or demanding urgent wire or crypto transactions.</td>
+                <td><span class="badge badge-medium">Medium</span></td>
+                <td><span class="badge badge-critical">Critical</span></td>
+                <td>Out-of-band verification via official public phone numbers; strict multi-party approval for financial disbursements.</td>
+              </tr>
+              <tr>
+                <td><strong>4. Account Impersonation</strong></td>
+                <td>Attackers masquerading as trusted colleagues, executives, or support technicians to extract confidential data.</td>
+                <td><span class="badge badge-high">High</span></td>
+                <td><span class="badge badge-high">High</span></td>
+                <td>Employee security awareness training, verifying sender identities, and establishing formal communication protocols.</td>
+              </tr>
+              <tr>
+                <td><strong>5. Weak Authentication</strong></td>
+                <td>Reliance on easily bypassed single-factor passwords or SMS OTPs that increase the impact of account compromise.</td>
+                <td><span class="badge badge-medium">Medium</span></td>
+                <td><span class="badge badge-high">High</span></td>
+                <td>Adopting phishing-resistant FIDO2 hardware security keys, authenticator apps, and enforcing strong password policies.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">* The scenarios above illustrate example threat models for security education, not confirmed system vulnerabilities.</p>
+      </section>
+
+      <!-- Section 4: Analysis History (SQLite) -->
+      <section class="card history-section">
+        <div class="card-header">
+          <div>
+            <h3>Analysis History</h3>
+            <span class="card-sub">Stored locally in SQLite database (`database.db`)</span>
+          </div>
+          <button id="btnClearHistory" class="btn btn-danger-sm">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            Clear History
+          </button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Date & Time</th>
+                <th>Message Excerpt (Redacted)</th>
+                <th>Risk Score</th>
+                <th>Classification</th>
+                <th>Detected Indicators</th>
+              </tr>
+            </thead>
+            <tbody id="historyTableBody">
+              <tr>
+                <td colspan="6" class="text-center empty-history">Loading history from SQLite...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="footer-inner">
+        <p><strong>PhishGuard AI</strong> &bull; Mini Project 3: Basic AI-Assisted Phishing Threat Model &bull; Python Flask + SQLite + HTML5/CSS3/JS</p>
+        <p class="footer-sub">Built for college mini-project demonstration. Operates 100% offline without external paid APIs.</p>
+      </div>
+    </footer>
+  </div>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>

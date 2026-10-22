@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PhishGuard AI — Potential Phishing Threat Blocked</title>
+  <link rel="stylesheet" href="warning.css">
+</head>
+<body>
+  <div class="warning-container">
+    <!-- Header with Cyber Shield Warning Icon -->
+    <div class="shield-container">
+      <div class="pulse-ring"></div>
+      <svg class="warning-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="#1e1322" stroke="#ef4444" stroke-width="2"/>
+        <line x1="12" y1="8" x2="12" y2="13" stroke="#ef4444" stroke-width="2.2" stroke-linecap="round"/>
+        <circle cx="12" cy="16.5" r="1" fill="#ef4444"/>
+      </svg>
+    </div>
+
+    <div class="header-text">
+      <div class="badge-row">
+        <span id="badgeRiskLevel" class="risk-badge risk-high">High Risk</span>
+        <span id="badgeDetectionMethod" class="method-badge">Rule-Based Detection</span>
+      </div>
+      <h1 id="titleHeader">Potential Phishing Website Blocked</h1>
+      <p class="subtitle">PhishGuard AI intercepted access to this destination to safeguard your credentials and personal data.</p>
+    </div>
+
+    <!-- Threat Summary Box -->
+    <div class="card threat-card">
+      <div class="threat-meta">
+        <div class="meta-item">
+          <span class="meta-label">Blocked Hostname</span>
+          <span id="displayHostname" class="meta-value host-highlight">unknown-host.example</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Assessed Risk Score</span>
+          <span id="displayScore" class="meta-value score-highlight">95 / 100</span>
+        </div>
+      </div>
+      <div class="url-row">
+        <span class="meta-label">Destination URL:</span>
+        <code id="displayUrl" class="url-code">https://...</code>
+      </div>
+    </div>
+
+    <!-- Why Blocked Rationale -->
+    <div class="card rationale-card">
+      <h3>Why was this website blocked?</h3>
+      <p id="displayReason" class="reason-text">The site triggered multiple high-confidence indicators characteristic of credential harvesting portals.</p>
+    </div>
+
+    <!-- Detected Indicators List -->
+    <div class="card indicators-card">
+      <h3>Detected Threat Indicators</h3>
+      <ul id="indicatorsList" class="indicators-list">
+        <!-- Rendered dynamically by warning.js -->
+      </ul>
+    </div>
+
+    <!-- Critical Security Advisory -->
+    <div class="advisory-banner">
+      <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="16" x2="12" y2="12"/>
+        <line x1="12" y1="8" x2="12.01" y2="8"/>
+      </svg>
+      <div>
+        <strong>Critical Security Advisory:</strong> Never enter passwords, One-Time Passwords (OTPs), PINs, or banking information on unfamiliar or flagged websites.
+      </div>
+    </div>
+
+    <!-- Actions Area -->
+    <div class="actions-area">
+      <button id="btnCloseTab" class="btn btn-primary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+        Close Tab
+      </button>
+
+      <button id="btnReturnSafety" class="btn btn-secondary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        Return to Safety
+      </button>
+    </div>
+
+    <!-- Advanced Flow for Uncertain / Unconfirmed Sites Only -->
+    <div id="advancedSection" class="advanced-section hidden">
+      <button id="btnToggleAdvanced" class="link-btn">Advanced: View details or proceed at own risk</button>
+      <div id="advancedPanel" class="advanced-panel hidden">
+        <p class="override-warning">
+          <strong>Warning:</strong> This domain is not confirmed on a blocklist, but exhibited suspicious heuristics. If you are entirely certain this destination is authentic, you may bypass this warning.
+        </p>
+        <button id="btnProceedAnyway" class="btn btn-danger-outline">Proceed Anyway (Unsafe)</button>
+      </div>
+    </div>
+
+    <footer class="warning-footer">
+      <span>PhishGuard AI — Mini Project: Basic AI-Assisted Phishing Threat Model</span>
+    </footer>
+  </div>
+
+  <script src="phishing_db.js"></script>
+  <script src="storage.js"></script>
+  <script src="warning.js"></script>
+</body>
+</html>
